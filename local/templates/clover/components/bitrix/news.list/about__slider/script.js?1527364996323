@@ -1,0 +1,14 @@
+var autoPlay = $('#fl-cr').data('autoplay');
+$('#fl-cr').flickity({
+    pageDots:true,
+    contain: true,
+    prevNextButtons: true,
+    wrapAround: false,
+    groupCells: true,
+    cellAlign: 'left',
+    adaptiveHeight: true,
+    autoPlay: autoPlay
+});
+$(document).ready(function(){
+    $('#fl-cr').flickity('resize');
+});

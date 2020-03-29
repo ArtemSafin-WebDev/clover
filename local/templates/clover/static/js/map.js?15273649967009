@@ -1,0 +1,99 @@
+
+function mapOffset(map){
+    var geoHeader = $('.geo-page-header')
+    if(geoHeader.length != 0){
+        if(((map.height() / 2)-200) < geoHeader.height()){
+            if($(window).height()<geoHeader.height()){
+                $('body, html').animate({scrollTop: ($(document).height() - $(window).height())}, 300);
+            }
+            return (geoHeader.height()+250 - (map.height() / 2))*(-1)
+        }else{
+            return 0;
+        }
+    }
+}
+
+$.fn.mapGeo = function(geo, option){
+    var json = geo;
+    var self = $(this), prev = false;
+    var mapElement = $(this).get(0);
+
+    var config = $.extend({
+        icon: '/local/templates/clover/static/images/css/location.png',
+        iconActive: '/local/templates/clover/static/images/css/location-in.png',
+        toggle: $('[data-role=locate-change]')
+    }, option);
+
+    var bubles = [], markers = [];
+    var def = {
+        'lat': 55.797720,
+        'lng': 49.109656,
+        'title': '420111, г. Казань, ул. Карла Маркса, 1'
+    }
+
+    var mapOptions = {
+        zoom: 6,
+        scrollwheel: false,
+        center: new google.maps.LatLng(55.797720, 49.109656),
+        styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.country","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"administrative.province","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
+    };
+    var map = new google.maps.Map(mapElement, mapOptions);
+
+    function iconRender(path){
+        //return new google.maps.MarkerImage(path, new google.maps.Size(24, 34), new google.maps.Point(0, 0), new google.maps.Point(11, 36))
+        return new google.maps.MarkerImage(path, new google.maps.Size(50, 70), new google.maps.Point(0, 0), new google.maps.Point(24, 65))
+    }
+    for(i=0;i<json.length;i++){
+        bubles.push(
+            new InfoBubble({
+                map: map,
+                content: '<div onclick="$(document).trigger(\'bubles.close\')" class="js-bubble-close icon-close"></div><div class="js-info-bubble-city">'+json[i].name+'</div><div class="js-info-bubble-adress">'+json[i].adress+'</div>',
+                position: new google.maps.LatLng(json[i].lat, json[i].lng),
+                shadowStyle: 0,
+                padding: 16,
+                maxWidth: 200,
+                minWidth: 200,
+                borderRadius: 0,
+                arrowStyle: 2,
+                arrowSize: 10,
+                borderWidth: 0,
+                maxHeight: 80,
+                minHeight: 20,
+                arrowPosition: 0
+            })
+        );
+
+        function changeM(marker, buble){
+            if(prev){
+                prev.buble.close(map);
+                prev.marker.setIcon(iconRender(config.icon))
+            }
+            if(marker && buble){
+                map.setCenter(marker.getPosition());
+                marker.setIcon(iconRender(config.iconActive));
+                buble.open(map);
+                return {'marker': marker, 'buble': buble};
+            }
+        }
+       
+        var marker = new google.maps.Marker({
+                position: { lat : json[i].lat, lng: json[i].lng},
+                map: map,
+                icon: iconRender(config.icon)
+        }).addListener('click', function() {  
+            for(i=0;i<bubles.length;i++){
+                if(bubles[i].position.lat() == this.getPosition().lat() && bubles[i].position.lng() == this.getPosition().lng()){
+                    prev = changeM(this, bubles[i])
+                }
+            }
+        });
+
+        $(document).on('bubles.close', function(){
+            changeM(false, false);
+        })
+    }
+}
+
+
+
+

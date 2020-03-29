@@ -1,0 +1,86 @@
+.content-top {
+    padding-top: 0;
+}
+
+.content-bottom {
+    padding-bottom: 0;
+}
+
+.lt-social-bar {
+    border: none;
+    min-height: 100px;
+}
+
+.js-output {
+    color: red;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.social__a.--linkedin {
+    color: #0c4370;
+}
+
+.text-block {
+    margin-bottom: 60px;
+}
+
+.text-block iframe {
+    max-width: 100%;
+    min-height: 400px;
+}
+
+.f-checkboxLabel a {
+    color: #898989;
+}
+
+@media all and (max-width: 600px) {
+    .text-block iframe {
+        height: auto;
+    }
+}
+
+.cmIziModalCookie {
+    padding: 30px 30px;
+    line-height: 1.6;
+}
+
+.cookieHead {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cookieText {
+    font-size: 14px;
+}
+
+.cookieBtn {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+
+.markweber {
+    display: inline-block;
+    background: url("static/images/css/mw-logo.png") 0 0 no-repeat;
+    width: 78px;
+    opacity: 0.5;
+    height: 25px;
+    float: right;
+    background-size: contain;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media all and (max-width: 1024px) {
+    .markweber {
+        float: none;
+    }
+    .cookieBtn {
+        position: relative;
+        right: 0;
+        top: 0;
+        margin-top: 20px;
+    }
+}

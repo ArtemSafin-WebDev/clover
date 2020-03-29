@@ -1,0 +1,5 @@
+$(document).on('click', '.js-show-all', function (e) {
+    $('.js-hide').removeClass('js-hide');
+    $(this).hide();
+    e.preventDefault();
+});

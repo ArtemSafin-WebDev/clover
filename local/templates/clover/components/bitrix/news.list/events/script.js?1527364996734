@@ -1,0 +1,27 @@
+var articleGet = 0;
+$('#article').iziModal({
+    overlayClose: true,
+    width: 995,
+    autoOpen: false,
+    overlayColor: 'rgba(0, 0, 0, 0.7)',
+    radius: 0,
+    bodyOverflow: true,
+    fullscreen: false,
+    openFullscreen: false,
+    history: false,
+    zindex: 1500,
+    transitionIn: 'fadeInUp',
+    transitionOut: 'fadeOutUp',
+    onOpening: function(modal){
+        modal.startLoading();
+        $.get('/local/action/event.php?id='+articleGet, function(data) {
+            $("#article .iziModal-content").html(data);
+            modal.stopLoading();
+        });
+
+    }
+});
+$(document).on('touched click', '[data-role=article-read]', function(){
+    articleGet = $(this).attr('data-id');
+    $('#article').iziModal('open');
+})

@@ -1,0 +1,51 @@
+.hex-red {
+    color: #1661f7;
+
+}
+
+.headline {
+    color: #3B425B;
+    font-weight: 600;
+    line-height: 1.35
+}
+
+.headline:after {
+    content: '\0020';
+    height: 2px;
+    display: block;
+    width: 75px;
+    background-color: #1661F7;
+}
+
+.headline.--h1 {
+    font-size: 28px;
+    margin-bottom: 32px
+}
+
+.headline.--h1:after {
+    margin-top: 33px
+}
+
+blockquote {
+    border: 0;
+    padding: 0;
+    padding-left: 123px;
+    position: relative;
+    display: block;
+    margin-bottom: 34px
+}
+
+blockquote:before {
+    content: '\0020';
+    display: block;
+    position: absolute;
+    left: 62px;
+    top: 0;
+    background: url(static/images/css/qtz.png) no-repeat center;
+    width: 33px;
+    height: 31px
+}
+
+blockquote > *:last-child {
+    margin-bottom: 0
+}

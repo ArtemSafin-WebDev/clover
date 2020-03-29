@@ -1,0 +1,6 @@
+$('[data-scroll]').on('click', function (e) {
+    var element = $($(this).data('scroll'));
+    destination = element.offset().top - 200;
+    $("html, body").animate({scrollTop: destination}, 800);
+    e.preventDefault();
+});
